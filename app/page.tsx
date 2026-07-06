@@ -2,11 +2,11 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { getUser } from '@/lib/supabase/server';
+import { getUserWorkspace } from '@/lib/supabase/server';
 
 export default async function HomePage() {
-  const user = await getUser();
-  if (user) redirect('/dashboard');
+  const ctx = await getUserWorkspace();
+  if (ctx) redirect('/dashboard');
 
   return (
     <div className="min-h-screen flex flex-col">

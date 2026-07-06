@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
-import { getUserWorkspace } from '@/lib/supabase/server';
+import { getUser, getUserWorkspace } from '@/lib/supabase/server';
 import { DashboardShell } from '@/components/dashboard/sidebar';
+import { SetupErrorPage } from '@/components/dashboard/setup-error';
 import { getMissingEnvMessage } from '@/lib/env';
 
 export default async function DashboardLayout({
@@ -8,8 +9,11 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const user = await getUser();
+  if (!user) redirect('/login');
+
   const ctx = await getUserWorkspace();
-  if (!ctx) redirect('/login');
+  if (!ctx) return <SetupErrorPage />;
 
   const envWarning = getMissingEnvMessage();
 
