@@ -1,0 +1,1 @@
+export { replicateProvider } from './openai';

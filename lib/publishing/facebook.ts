@@ -1,0 +1,1 @@
+export { facebookService } from './types';

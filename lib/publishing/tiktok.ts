@@ -1,0 +1,1 @@
+export { tiktokService } from './types';

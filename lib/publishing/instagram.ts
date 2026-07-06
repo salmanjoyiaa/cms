@@ -1,0 +1,1 @@
+export { instagramService } from './types';

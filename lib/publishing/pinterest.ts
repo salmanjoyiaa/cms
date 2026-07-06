@@ -1,0 +1,1 @@
+export { pinterestService } from './types';

@@ -1,0 +1,1 @@
+export { linkedinService } from './types';
