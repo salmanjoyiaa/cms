@@ -114,19 +114,27 @@ Cron routes require `Authorization: Bearer ${CRON_SECRET}` header.
 
 | Route | Schedule (example) | Purpose |
 |-------|-------------------|---------|
-| `/api/cron/publishing` | `*/15 * * * *` | Process scheduled queue |
-| `/api/cron/research` | `0 6 * * *` | Auto-research active channels |
-| `/api/cron/analytics` | `0 */6 * * *` | Sync platform analytics |
+| `/api/cron/publishing` | `0 6 * * *` | Process scheduled queue (daily at 6:00 UTC) |
+| `/api/cron/research` | `0 7 * * *` | Auto-research active channels |
+| `/api/cron/analytics` | `0 8 * * *` | Sync platform analytics |
 | `/api/cron/recommendations` | `0 8 * * 1` | Weekly AI recommendations |
 
-**Crons are disabled by default** until `CRON_SECRET` is set. The included `vercel.json` only enables the publishing cron. Add others in Vercel dashboard when ready:
+**Vercel Hobby limit:** Cron jobs may run at most **once per day**. The included [`vercel.json`](vercel.json) uses `0 6 * * *` for publishing so Hobby deployments succeed. Sub-daily schedules (e.g. every 15 minutes) require **Vercel Pro** or manual triggers.
+
+**Crons are disabled by default** until `CRON_SECRET` is set. To trigger publishing manually on Hobby:
+
+```bash
+curl -H "Authorization: Bearer YOUR_CRON_SECRET" https://your-app.vercel.app/api/cron/publishing
+```
+
+On **Vercel Pro**, you can add more frequent crons in the dashboard or `vercel.json`:
 
 ```json
 {
   "crons": [
-    { "path": "/api/cron/publishing", "schedule": "*/15 * * * *" },
-    { "path": "/api/cron/research", "schedule": "0 6 * * *" },
-    { "path": "/api/cron/analytics", "schedule": "0 */6 * * *" },
+    { "path": "/api/cron/publishing", "schedule": "0 6 * * *" },
+    { "path": "/api/cron/research", "schedule": "0 7 * * *" },
+    { "path": "/api/cron/analytics", "schedule": "0 8 * * *" },
     { "path": "/api/cron/recommendations", "schedule": "0 8 * * 1" }
   ]
 }
